@@ -22,12 +22,9 @@ class ApiDishRepository : DishRepository {
     override fun getDishesForRestaurant(restaurantId: String): List<Dish> {
         return runBlocking {
             try {
-                // BÚSQUEDA MANUAL: Obtener todos los platos y filtrar por restaurante
-                val response = apiService.getAllPlates()
+                val response = apiService.getAllPlates(restaurantId)
                 if (response.isSuccessful) {
-                    response.body()?.data
-                        ?.filter { it.idRestaurant == restaurantId }
-                        ?.map { it.toDish() } ?: emptyList()
+                    response.body()?.data?.map { it.toDish() } ?: emptyList()
                 } else {
                     emptyList()
                 }
@@ -41,7 +38,7 @@ class ApiDishRepository : DishRepository {
         runBlocking {
             try {
                 val request = dish.toCreatePlateRequest()
-                apiService.createPlate(getAuthHeader(), request)
+                apiService.createPlate(restaurantId, getAuthHeader(), request)
             } catch (e: Exception) {
                 // Log error or handle appropriately
             }
@@ -51,7 +48,7 @@ class ApiDishRepository : DishRepository {
     override fun removeDish(restaurantId: String, dishId: String) {
         runBlocking {
             try {
-                apiService.deletePlate(dishId, getAuthHeader())
+                apiService.deletePlate(restaurantId, dishId, getAuthHeader())
             } catch (e: Exception) {
                 // Log error or handle appropriately
             }
@@ -62,7 +59,7 @@ class ApiDishRepository : DishRepository {
         runBlocking {
             try {
                 val request = dish.toUpdatePlateRequest()
-                apiService.updatePlate(dish.id, getAuthHeader(), request)
+                apiService.updatePlate(restaurantId, dish.id, getAuthHeader(), request)
             } catch (e: Exception) {
                 // Log error or handle appropriately
             }
@@ -70,10 +67,10 @@ class ApiDishRepository : DishRepository {
     }
 
     // Funciones adicionales con búsqueda manual
-    fun getAllDishes(): List<Dish> {
+    fun getAllDishes(restaurantId: String): List<Dish> {
         return runBlocking {
             try {
-                val response = apiService.getAllPlates()
+                val response = apiService.getAllPlates(restaurantId)
                 if (response.isSuccessful) {
                     response.body()?.data?.map { it.toDish() } ?: emptyList()
                 } else {
@@ -85,26 +82,31 @@ class ApiDishRepository : DishRepository {
         }
     }
 
-    fun getDishById(dishId: String): Dish? {
+    fun getDishById(restaurantId: String, dishId: String): Dish? {
         return runBlocking {
             try {
-                // BÚSQUEDA MANUAL: Obtener todos los platos y filtrar por ID
-                val allDishes = getAllDishes()
-                allDishes.find { it.id == dishId }
+                val response = apiService.getPlateById(restaurantId, dishId)
+                if (response.isSuccessful) {
+                    response.body()?.data?.toDish()
+                } else {
+                    null
+                }
             } catch (e: Exception) {
                 null
             }
         }
     }
 
-    fun getDishesByCategory(category: String): List<Dish> {
+    fun getDishesByCategory(restaurantId: String, category: String): List<Dish> {
         return runBlocking {
             try {
-                // BÚSQUEDA MANUAL: Obtener todos los platos y filtrar por categoría
-                val allDishes = getAllDishes()
-                allDishes.filter { dish ->
-                    // Nota: tu modelo Dish no tiene category, pero podrías agregarlo si lo necesitas
-                    true // Por ahora devuelve todos
+                val response = apiService.getAllPlates(restaurantId)
+                if (response.isSuccessful) {
+                    response.body()?.data
+                        ?.map { it.toDish() }
+                        ?.filter { it.category == category } ?: emptyList()
+                } else {
+                    emptyList()
                 }
             } catch (e: Exception) {
                 emptyList()

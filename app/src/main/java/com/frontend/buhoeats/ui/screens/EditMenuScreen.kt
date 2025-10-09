@@ -256,7 +256,8 @@ fun EditMenuScreen(
                                     name = name,
                                     description = description,
                                     imageUrl = imageToSave,
-                                    price = formattedPrice
+                                    price = formattedPrice,
+                                    category = "General"
                                 )
                                 val updatedRestaurant = restaurant.copy(
                                     menu = restaurant.menu + newDish

@@ -19,7 +19,8 @@ data class Dish(
     val name: String,
     val description: String,
     val imageUrl: String,
-    val price: String
+    val price: String,
+    val category: String,
 ) : Serializable
 
 data class Restaurant(

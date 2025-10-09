@@ -29,22 +29,14 @@ class ApiPromoRepository : PromoRepository {
     override fun getAllPromos(): List<Promo> {
         // IMPLEMENTACIÓN MANUAL: Como el backend no tiene endpoint GET /promotion/all,
         // podemos mantener un cache local o solicitar al backend que agregue este endpoint
-        return runBlocking {
-            try {
-                // Por ahora retornamos lista vacía hasta que el backend tenga el endpoint
-                // o podemos mantener un cache local de las promos creadas
-                emptyList<Promo>()
-            } catch (e: Exception) {
-                emptyList()
-            }
-        }
+        return emptyList<Promo>()
     }
 
     override fun addPromoToRestaurant(restaurantId: String, promo: Promo) {
         runBlocking {
             try {
                 val request = promo.toCreatePromotionRequest()
-                apiService.createPromotion(getAuthHeader(), request)
+                apiService.createPromotion(restaurantId, getAuthHeader(), request)
             } catch (e: Exception) {
                 // Log error or handle appropriately
             }
@@ -54,7 +46,7 @@ class ApiPromoRepository : PromoRepository {
     override fun removePromo(promo: Promo) {
         runBlocking {
             try {
-                apiService.deletePromotion(promo.id, getAuthHeader())
+                apiService.deletePromotion(promo.restaurantId, promo.id, getAuthHeader())
             } catch (e: Exception) {
                 // Log error or handle appropriately
             }
@@ -65,7 +57,7 @@ class ApiPromoRepository : PromoRepository {
         runBlocking {
             try {
                 val request = updatedPromo.toUpdatePromotionRequest()
-                apiService.updatePromotion(updatedPromo.id, getAuthHeader(), request)
+                apiService.updatePromotion(updatedPromo.restaurantId, updatedPromo.id, getAuthHeader(), request)
             } catch (e: Exception) {
                 // Log error or handle appropriately
             }
@@ -73,10 +65,10 @@ class ApiPromoRepository : PromoRepository {
     }
 
     // Funciones adicionales con búsqueda manual
-    fun getPromoById(promoId: String): Promo? {
+    fun getPromoById(restaurantId: String, promoId: String): Promo? {
         return runBlocking {
             try {
-                val response = apiService.getPromotionById(promoId)
+                val response = apiService.getPromotionById(restaurantId, promoId)
                 if (response.isSuccessful) {
                     response.body()?.data?.toPromo()
                 } else {

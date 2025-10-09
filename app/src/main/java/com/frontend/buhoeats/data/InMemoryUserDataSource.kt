@@ -111,14 +111,16 @@ object InMemoryUserDataSource {
                     name = "Pupusas revueltas",
                     description = "Pupusas con chicharrón, frijoles y queso.",
                     imageUrl = "https://images.unsplash.com/photo-1617902271850-21d560795d60",
-                    price = "5.00"
+                    price = "5.00",
+                    category = "Desayuno"
                 ),
                 Dish(
                     id = "2",
                     name = "Sopa de gallina india",
                     description = "Sopa tradicional con vegetales frescos.",
                     imageUrl = "https://images.unsplash.com/photo-1665594051407-7385d281ad76",
-                    price = "5.00"
+                    price = "5.00",
+                    category = "Desayuno"
                 )
             ),
                 promos = listOf(
@@ -174,14 +176,16 @@ object InMemoryUserDataSource {
                     name = "Ceviche mixto",
                     description = "Pescado, camarones y calamares en jugo de limón.",
                     imageUrl = "https://images.unsplash.com/photo-1626663011519-b42e5ee10056",
-                    price = "5.00"
+                    price = "5.00",
+                    category = "Almuerzo"
                 ),
                 Dish(
                     id = "4",
                     name = "Tacos al pastor",
                     description = "Tacos con carne de cerdo marinada al estilo mexicano.",
                     imageUrl = "https://images.unsplash.com/photo-1552332386-f8dd00dc2f85",
-                    price = "5.00"
+                    price = "5.00",
+                    category = "Almuerzo"
                 )
             ),
             promos = listOf(

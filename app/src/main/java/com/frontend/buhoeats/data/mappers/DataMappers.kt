@@ -95,7 +95,8 @@ object DataMappers {
             name = this.name,
             description = this.description,
             imageUrl = this.image ?: "", // MAPEO: backend.image → modelo.imageUrl (era picture, ahora es image)
-            price = this.price.toString() // Convertir de Double a String como espera tu modelo
+            price = this.price.toString() ,// Convertir de Double a String como espera tu modelo,
+            category = this.category
         )
     }
 

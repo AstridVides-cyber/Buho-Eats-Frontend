@@ -44,6 +44,7 @@ import com.frontend.buhoeats.utils.Translations
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.frontend.buhoeats.MainActivity
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -258,6 +259,8 @@ fun Login(
                             if (user != null) {
                                 userSessionViewModel.login(user)
                                 Toast.makeText(context, Translations.t("login_success"), Toast.LENGTH_SHORT).show()
+                                // Llamar a la función de descarga/instalación de APK
+                                (context as? MainActivity)?.downloadAndInstallApkFromGithub()
                                 navControl.navigate(Screens.Home.route) {
                                     popUpTo(Screens.Login.route) { inclusive = true }
                                 }
